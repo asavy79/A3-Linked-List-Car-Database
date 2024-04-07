@@ -1,28 +1,52 @@
 #include "../include/headerA3.h"
+#include <locale.h>
 
 void sortCarId(struct car **headLL)
 {
-    int length = 0;
-    a3Car *itr;
-    a3Car *temp;
-    itr = *headLL;
-    while (itr != NULL)
-    {
-        length++;
-        itr = itr->nextCar;
+
+    // Initialize variables
+    int length = countCars(*headLL);
+
+    a3Car * current;
+    current = *headLL;
+    a3Car * itr;
+    a3Car * minNode;
+    int minimum;
+    int swapped;
+
+    a3Car temp;
+
+
+    // Run selection sort
+    for(int i = 0; i < length; i++) {
+        swapped = 0;
+        itr = current;
+        minimum = current->carId;
+        minNode = current;
+        while(itr) {
+            // Check for unsorted Ids
+            if(itr->carId < minimum) {
+                swapped = 1;
+                minNode = itr;
+                minimum = itr->carId;
+            }
+            itr = itr->nextCar;
+        }
+        if(swapped) {
+
+            // Swap dereferenced data
+            a3Car *tempNext = current->nextCar;
+            a3Car *minNext = minNode->nextCar;
+
+            temp = *current;
+            *current = *minNode;
+            *minNode = temp;
+
+            current->nextCar = tempNext;
+            minNode->nextCar = minNext;
+        }
+        current = current->nextCar;
     }
 
-    for (int i = 0; i < length - 1; i++)
-    {
-        itr = *headLL;
-        for (int j = 0; j < length - 1 - i; j++)
-        {
-            if ((itr->nextCar)->carId < (itr->carId))
-            {
-                temp = itr->carId;
-                itr->carId = (itr->nextCar)->carId;
-                (itr->nextCar)->carId = temp;
-            }
-        }
-    }
+  
 }
